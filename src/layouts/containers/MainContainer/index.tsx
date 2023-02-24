@@ -6,7 +6,7 @@ interface Props {
 }
 
 export const MainContainer = memo(({ children }: Props) => (
-  <Box width='60%' margin='5% auto'>
+  <Box width='60%' margin='2% auto'>
     {children}
   </Box>
 ));
