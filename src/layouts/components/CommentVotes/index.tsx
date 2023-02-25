@@ -2,7 +2,11 @@ import { AddIcon, MinusIcon } from '@chakra-ui/icons';
 import { Flex, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 
-export const CommentVotes = ({ counter }: any) => {
+interface Props {
+  counter: number;
+}
+
+export const CommentVotes = ({ counter }: Props) => {
   const [likes, setLikes] = useState<number>(counter);
   const [isVoted, setIsVoted] = useState<boolean>(false);
 
