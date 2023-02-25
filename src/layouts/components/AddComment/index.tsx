@@ -21,7 +21,8 @@ export const AddComment = () => {
 
     const newComment = {
       id: Math.floor(Math.random() * 10000),
-      username: 'me',
+      username: loggedUserData.username,
+      image: loggedUserData.image,
       date: 'now',
       counter: 0,
       text: commentText,
