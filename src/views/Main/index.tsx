@@ -1,19 +1,18 @@
 import { MainContainer } from '../../layouts/containers/MainContainer';
-import { useState } from 'react';
-import { data } from '../../data';
 import { Comment } from '../../layouts/components/Comment';
 import { AddComment } from '../../layouts/components/AddComment';
+import { useReplyCommentContext } from '../../context/ReplyComment';
 
 export const MainView = () => {
-  const [comments, setComments] = useState(data);
+  const { comments } = useReplyCommentContext();
 
   return (
     <MainContainer>
-      {comments.map(({ id, ...rest }) => (
-        <Comment key={id} {...rest} />
+      {comments.map(({ id, ...rest }: any) => (
+        <Comment key={id} id={id} {...rest} />
       ))}
 
-      <AddComment setComments={setComments} />
+      <AddComment />
     </MainContainer>
   );
 };

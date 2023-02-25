@@ -1,11 +1,11 @@
-import { Flex } from '@chakra-ui/react';
+import { Flex, FlexProps } from '@chakra-ui/react';
 import { memo, ReactNode } from 'react';
 
-interface Props {
+interface Props extends FlexProps {
   children: ReactNode | ReactNode[];
 }
 
-export const CommentContainer = memo(({ children }: Props) => (
+export const CommentContainer = memo(({ children, ...rest }: Props) => (
   <Flex
     bgColor='#fff'
     m='1rem 0'
@@ -13,6 +13,8 @@ export const CommentContainer = memo(({ children }: Props) => (
     gap='1.5rem'
     borderRadius='0.5rem'
     alignItems='flex-start'
+    width='100%'
+    {...rest}
   >
     {children}
   </Flex>

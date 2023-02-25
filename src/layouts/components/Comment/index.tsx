@@ -2,6 +2,7 @@ import { Button, Flex, Image, Text } from '@chakra-ui/react';
 import { ChatIcon } from '@chakra-ui/icons';
 import { CommentContainer } from '../../containers/CommentContainer';
 import { CommentVotes } from '../CommentVotes';
+import { useReplyCommentContext } from '../../../context/ReplyComment';
 
 interface Props {
   username: string;
@@ -9,9 +10,34 @@ interface Props {
   counter: number;
   text: string;
   repplies: any[];
+  id: number;
+  originId?: number;
+  image: string;
 }
 
-export const Comment = ({ counter, text, repplies, username, date }: Props) => {
+export const Comment = ({
+  counter,
+  text,
+  repplies,
+  username,
+  date,
+  id,
+  originId,
+  image,
+}: Props) => {
+  const { setReplyAnswerId, setReplyUser } = useReplyCommentContext();
+
+  const onClickReply = () => {
+    if (!originId) {
+      setReplyAnswerId(id);
+      setReplyUser(username);
+      return;
+    }
+
+    setReplyAnswerId(originId);
+    setReplyUser(username);
+  };
+
   return (
     <>
       <CommentContainer>
@@ -21,7 +47,7 @@ export const Comment = ({ counter, text, repplies, username, date }: Props) => {
           <Flex justifyContent='space-between' alignItems='flex-start'>
             <Flex gap='1rem' mb='0.5rem'>
               <Image
-                src='https://bit.ly/dan-abramov'
+                src={image}
                 alt='Dan Abramov'
                 sx={{ width: '2rem', height: '2rem' }}
                 borderRadius='50%'
@@ -40,6 +66,7 @@ export const Comment = ({ counter, text, repplies, username, date }: Props) => {
                 bgColor='transparent'
                 p='0.5rem'
                 borderRadius='0.5rem'
+                onClick={onClickReply}
                 sx={{
                   '&:hover': {
                     backgroundColor: '#F7EEFF',
@@ -56,14 +83,14 @@ export const Comment = ({ counter, text, repplies, username, date }: Props) => {
       </CommentContainer>
 
       {repplies &&
-        repplies.map(({ id, ...rest }) => (
-          <Flex key={id} width='100%' position='relative'>
+        repplies.map(({ id: repplyId, ...rest }) => (
+          <Flex key={repplyId} width='100%' position='relative'>
             <Flex width='7%' justifyContent='center'>
               <Flex border='0.5px solid #fff' />
             </Flex>
 
             <Flex width='93%'>
-              <Comment {...rest} />
+              <Comment id={repplyId} {...rest} originId={id} />
             </Flex>
           </Flex>
         ))}
