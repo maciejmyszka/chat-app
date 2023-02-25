@@ -19,6 +19,7 @@ interface Props {
   id: number;
   originId?: number;
   image: string;
+  scrollToAdd?: () => void;
 }
 
 export const Comment = ({
@@ -30,6 +31,7 @@ export const Comment = ({
   id,
   originId,
   image,
+  scrollToAdd,
 }: Props) => {
   const [isHovering, setIsHovering] = useState<boolean>(false);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
@@ -44,11 +46,13 @@ export const Comment = ({
     if (!originId) {
       setReplyAnswerId(id);
       setReplyUser(username);
+      scrollToAdd?.();
       return;
     }
 
     setReplyAnswerId(originId);
     setReplyUser(username);
+    scrollToAdd?.();
     return;
   };
 
@@ -159,7 +163,12 @@ export const Comment = ({
           </Flex>
 
           <Flex width='93%'>
-            <Comment id={replyId} {...rest} originId={id} />
+            <Comment
+              id={replyId}
+              {...rest}
+              originId={id}
+              scrollToAdd={scrollToAdd}
+            />
           </Flex>
         </Flex>
       ))}

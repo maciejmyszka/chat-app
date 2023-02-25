@@ -5,7 +5,7 @@ import { useReplyCommentContext } from '../../../context/ReplyComment';
 import { loggedUserData } from '../../../data';
 import { ReplyInfo } from '../ReplyInfo';
 
-export const AddComment = () => {
+export const AddComment = ({ addRef }: any) => {
   const [commentText, setCommentText] = useState<string>('');
 
   const {
@@ -80,6 +80,7 @@ export const AddComment = () => {
         </Flex>
 
         <Button
+          ref={addRef}
           bgColor='#8835D3'
           color='#fff'
           size='md'

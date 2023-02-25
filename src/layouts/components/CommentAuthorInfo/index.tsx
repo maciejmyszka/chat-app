@@ -14,7 +14,7 @@ export const CommentAuthorInfo = ({
   date,
   isLoggedUser,
 }: Props) => (
-  <Flex gap='1rem' alignItems='center'>
+  <Flex gap='1rem' alignItems='center' flexWrap='wrap' justifyContent='center'>
     <Image
       src={image}
       alt='Dan Abramov'
