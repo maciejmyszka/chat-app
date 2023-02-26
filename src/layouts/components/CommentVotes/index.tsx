@@ -1,12 +1,12 @@
-import { AddIcon, MinusIcon } from '@chakra-ui/icons';
-import { Flex, Text } from '@chakra-ui/react';
 import { useState } from 'react';
+import { AddIcon, MinusIcon } from '@chakra-ui/icons';
+import { Text } from '@chakra-ui/react';
+import { useSingleCommentContext } from '../../../context/SingleComment';
+import { CommentVotesContainer } from '../../containers/CommentVotesContainer';
 
-interface Props {
-  counter: number;
-}
+export const CommentVotes = () => {
+  const { counter } = useSingleCommentContext();
 
-export const CommentVotes = ({ counter }: Props) => {
   const [likes, setLikes] = useState<number>(counter);
   const [isVoted, setIsVoted] = useState<boolean>(false);
 
@@ -25,15 +25,7 @@ export const CommentVotes = ({ counter }: Props) => {
   };
 
   return (
-    <Flex
-      flexDirection='column'
-      justifyContent='space-between'
-      bgColor='#EBF4FF'
-      p='0.5rem 0.5rem'
-      alignItems='center'
-      borderRadius='0.5rem'
-      gap='1rem'
-    >
+    <CommentVotesContainer>
       <AddIcon
         sx={{
           cursor: !isVoted ? 'pointer' : 'not-allowed',
@@ -47,6 +39,6 @@ export const CommentVotes = ({ counter }: Props) => {
         }}
         onClick={onClickMinus}
       />
-    </Flex>
+    </CommentVotesContainer>
   );
 };

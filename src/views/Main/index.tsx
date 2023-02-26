@@ -1,12 +1,14 @@
+import { useRef } from 'react';
 import { MainContainer } from '../../layouts/containers/MainContainer';
 import { Comment } from '../../layouts/components/Comment';
 import { AddComment } from '../../layouts/components/AddComment';
 import { useReplyCommentContext } from '../../context/ReplyComment';
 import { CommentType } from '../../types/Comment';
-import { useRef } from 'react';
+import { SingleCommentProvider } from '../../context/SingleComment';
 
 export const MainView = () => {
   const { comments } = useReplyCommentContext();
+
   const addRef = useRef<HTMLButtonElement>(null);
 
   const scrollToAdd = () => {
@@ -18,7 +20,9 @@ export const MainView = () => {
   return (
     <MainContainer>
       {comments.map(({ id, ...rest }: CommentType) => (
-        <Comment key={id} id={id} {...rest} scrollToAdd={scrollToAdd} />
+        <SingleCommentProvider key={id} id={id} {...rest}>
+          <Comment scrollToAdd={scrollToAdd} />
+        </SingleCommentProvider>
       ))}
 
       <AddComment addRef={addRef} />

@@ -1,4 +1,4 @@
-import { RefObject, useState } from 'react';
+import { memo, RefObject, useState } from 'react';
 import { Button, Flex, Image, Textarea, useToast } from '@chakra-ui/react';
 import { CommentContainer } from '../../containers/CommentContainer';
 import { useReplyCommentContext } from '../../../context/ReplyComment';
@@ -9,7 +9,7 @@ interface Props {
   addRef: RefObject<HTMLButtonElement>;
 }
 
-export const AddComment = ({ addRef }: Props) => {
+export const AddComment = memo(({ addRef }: Props) => {
   const toast = useToast();
 
   const [commentText, setCommentText] = useState<string>('');
@@ -113,4 +113,4 @@ export const AddComment = ({ addRef }: Props) => {
       </CommentContainer>
     </>
   );
-};
+});

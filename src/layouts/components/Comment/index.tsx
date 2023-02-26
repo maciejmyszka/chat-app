@@ -1,50 +1,29 @@
-import { useState } from 'react';
-import { Button, Flex, Text, Textarea, useToast } from '@chakra-ui/react';
+import { memo } from 'react';
+import { useToast } from '@chakra-ui/react';
 import { CommentContainer } from '../../containers/CommentContainer';
 import { CommentVotes } from '../CommentVotes';
 import { useReplyCommentContext } from '../../../context/ReplyComment';
-import { loggedUserData } from '../../../data';
 import { CommentActions } from '../CommentActions';
 import { CommentContentContainer } from '../../containers/CommentContentContainer';
 import { CommentAuthorInfo } from '../CommentAuthorInfo';
 import { CommentTopContainer } from '../../containers/CommentTopContainer';
-import { CommentType } from '../../../types/Comment';
+import { Replies } from '../Replies';
+import { useSingleCommentContext } from '../../../context/SingleComment';
+import { CommentContent } from '../CommentContent';
 
 interface Props {
-  username: string;
-  date: string;
-  counter: number;
-  text: string;
-  replies?: CommentType[];
-  id: number;
   originId?: number;
-  image: string;
   scrollToAdd?: () => void;
 }
 
-export const Comment = ({
-  counter,
-  text,
-  replies,
-  username,
-  date,
-  id,
-  originId,
-  image,
-  scrollToAdd,
-}: Props) => {
-  const [isHovering, setIsHovering] = useState<boolean>(false);
-  const [isEditMode, setIsEditMode] = useState<boolean>(false);
-  const [commentText, setCommentText] = useState<string>(text);
-
+export const Comment = memo(({ originId, scrollToAdd }: Props) => {
   const toast = useToast();
 
-  const [isRepliesVisible, setIsRepliesVisible] = useState<boolean>(false);
+  const { id, username, commentText, setIsEditMode, setIsHovering } =
+    useSingleCommentContext();
 
   const { setReplyAnswerId, setReplyUser, comments, setComments } =
     useReplyCommentContext();
-
-  const isLoggedUser = username === loggedUserData.username;
 
   const onClickReply = () => {
     if (!originId) {
@@ -99,7 +78,7 @@ export const Comment = ({
   };
 
   const onClickEdit = () => {
-    setIsEditMode((prevState) => !prevState);
+    setIsEditMode((prevState: boolean) => !prevState);
   };
 
   const onClickSave = () => {
@@ -152,115 +131,23 @@ export const Comment = ({
   return (
     <>
       <CommentContainer setIsHovering={setIsHovering}>
-        <CommentVotes counter={counter} />
+        <CommentVotes />
 
         <CommentContentContainer>
           <CommentTopContainer>
-            <CommentAuthorInfo
-              username={username}
-              date={date}
-              image={image}
-              isLoggedUser={isLoggedUser}
-            />
-
+            <CommentAuthorInfo />
             <CommentActions
-              username={username}
-              isHovering={isHovering}
               onClickDelete={onClickDelete}
               onClickEdit={onClickEdit}
               onClickReply={onClickReply}
             />
           </CommentTopContainer>
 
-          {isEditMode ? (
-            <Flex flexDirection='column' gap='1rem' alignItems='flex-start'>
-              <Textarea
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-              />
-              <Button onClick={onClickSave} isDisabled={!commentText}>
-                Save
-              </Button>
-            </Flex>
-          ) : (
-            <Text>{text}</Text>
-          )}
+          <CommentContent onClickSave={onClickSave} />
         </CommentContentContainer>
       </CommentContainer>
 
-      {replies?.slice(0, 1).map(({ id: replyId, ...rest }) => (
-        <Flex key={replyId} width='100%' position='relative'>
-          <Flex width='7%' justifyContent='center'>
-            <Flex border='0.5px solid #fff' />
-          </Flex>
-
-          <Flex width='93%'>
-            <Comment
-              id={replyId}
-              {...rest}
-              originId={id}
-              scrollToAdd={scrollToAdd}
-            />
-          </Flex>
-        </Flex>
-      ))}
-
-      {!isRepliesVisible && !originId && replies && replies.length > 1 && (
-        <Flex width='100%' position='relative'>
-          <Flex width='7%' justifyContent='center'>
-            <Flex border='0.5px solid #fff' />
-          </Flex>
-
-          <Flex width='93%'>
-            <Text
-              fontWeight='600'
-              onClick={() => setIsRepliesVisible(true)}
-              sx={{
-                cursor: 'pointer',
-
-                '&:hover': {
-                  textDecoration: 'underline',
-                },
-              }}
-            >{`Show all answers... (${replies?.length})`}</Text>
-          </Flex>
-        </Flex>
-      )}
-
-      {isRepliesVisible &&
-        !originId &&
-        replies?.map(({ id: replyId, ...rest }, index) => (
-          <Flex key={replyId} width='100%' position='relative'>
-            <Flex width='7%' justifyContent='center'>
-              <Flex border='0.5px solid #fff' />
-            </Flex>
-
-            <Flex width='93%' flexDirection='column'>
-              <Comment
-                id={replyId}
-                {...rest}
-                originId={id}
-                scrollToAdd={scrollToAdd}
-              />
-
-              {index === replies.length - 1 && (
-                <Text
-                  fontWeight='600'
-                  onClick={() => setIsRepliesVisible(false)}
-                  sx={{
-                    cursor: 'pointer',
-
-                    '&:hover': {
-                      textDecoration: 'underline',
-                    },
-                  }}
-                >
-                  Show less answers...
-                </Text>
-              )}
-            </Flex>
-          </Flex>
-        ))}
+      <Replies scrollToAdd={scrollToAdd} originId={originId} />
     </>
   );
-};
+});

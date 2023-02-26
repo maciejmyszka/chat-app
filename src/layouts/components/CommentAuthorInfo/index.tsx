@@ -1,30 +1,28 @@
 import { Flex, Image, Text } from '@chakra-ui/react';
 import { YouLabel } from '../YouLabel';
+import { useSingleCommentContext } from '../../../context/SingleComment';
 
-interface Props {
-  username: string;
-  image: string;
-  date: string;
-  isLoggedUser: boolean;
-}
+export const CommentAuthorInfo = () => {
+  const { username, image, date, isLoggedUser } = useSingleCommentContext();
 
-export const CommentAuthorInfo = ({
-  username,
-  image,
-  date,
-  isLoggedUser,
-}: Props) => (
-  <Flex gap='1rem' alignItems='center' flexWrap='wrap' justifyContent='center'>
-    <Image
-      src={image}
-      alt='Dan Abramov'
-      sx={{ width: '2rem', height: '2rem' }}
-      borderRadius='50%'
-    />
-    <Text fontWeight='600'>{username}</Text>
+  return (
+    <Flex
+      gap='1rem'
+      alignItems='center'
+      flexWrap='wrap'
+      justifyContent='center'
+    >
+      <Image
+        src={image}
+        alt='Dan Abramov'
+        sx={{ width: '2rem', height: '2rem' }}
+        borderRadius='50%'
+      />
+      <Text fontWeight='600'>{username}</Text>
 
-    {isLoggedUser && <YouLabel />}
+      {isLoggedUser && <YouLabel />}
 
-    <Text color='#A7A7A7'>{date}</Text>
-  </Flex>
-);
+      <Text color='#A7A7A7'>{date}</Text>
+    </Flex>
+  );
+};

@@ -2,12 +2,15 @@ import { Flex } from '@chakra-ui/react';
 import { ChildrenProps } from '../../../types/ChildrenProps';
 import { memo } from 'react';
 
-export const CommentTopContainer = memo(({ children }: ChildrenProps) => (
+export const CommentVotesContainer = memo(({ children }: ChildrenProps) => (
   <Flex
+    flexDirection='column'
     justifyContent='space-between'
+    bgColor='#EBF4FF'
+    p='0.5rem 0.5rem'
     alignItems='center'
-    mb='0.5rem'
-    flexDirection={{ xs: 'column', sm: 'row' }}
+    borderRadius='0.5rem'
+    gap='1rem'
   >
     {children}
   </Flex>
