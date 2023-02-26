@@ -18,6 +18,7 @@ export const CommentContainer = memo(
       width='100%'
       onMouseOver={() => setIsHovering && setIsHovering(true)}
       onMouseOut={() => setIsHovering && setIsHovering(false)}
+      flexDirection={{ xxs: 'column', xs: 'row' }}
       {...rest}
     >
       {children}
