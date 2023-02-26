@@ -7,7 +7,7 @@ export const CommentTopContainer = memo(({ children }: ChildrenProps) => (
     justifyContent='space-between'
     alignItems='center'
     mb='0.5rem'
-    flexDirection={{ xs: 'column', sm: 'row' }}
+    flexDirection={{ xxs: 'column', md: 'row' }}
   >
     {children}
   </Flex>
