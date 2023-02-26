@@ -7,7 +7,7 @@ import { useRef } from 'react';
 
 export const MainView = () => {
   const { comments } = useReplyCommentContext();
-  const addRef = useRef<HTMLInputElement>(null);
+  const addRef = useRef<HTMLButtonElement>(null);
 
   const scrollToAdd = () => {
     if (addRef.current) {

@@ -1,11 +1,17 @@
-import { useState } from 'react';
-import { Button, Flex, Image, Textarea } from '@chakra-ui/react';
+import { RefObject, useState } from 'react';
+import { Button, Flex, Image, Textarea, useToast } from '@chakra-ui/react';
 import { CommentContainer } from '../../containers/CommentContainer';
 import { useReplyCommentContext } from '../../../context/ReplyComment';
 import { loggedUserData } from '../../../data';
 import { ReplyInfo } from '../ReplyInfo';
 
-export const AddComment = ({ addRef }: any) => {
+interface Props {
+  addRef: RefObject<HTMLButtonElement>;
+}
+
+export const AddComment = ({ addRef }: Props) => {
+  const toast = useToast();
+
   const [commentText, setCommentText] = useState<string>('');
 
   const {
@@ -36,6 +42,14 @@ export const AddComment = ({ addRef }: any) => {
       setReplyAnswerId(null);
       setReplyUser('');
       setCommentText('');
+
+      toast({
+        title: 'Comment added',
+        status: 'success',
+        position: 'top-right',
+        duration: 4000,
+        isClosable: true,
+      });
     }
     return;
   };
@@ -54,6 +68,13 @@ export const AddComment = ({ addRef }: any) => {
     setComments((prevValue) => [...prevValue, newComment]);
     setCommentText('');
     setReplyUser('');
+    toast({
+      title: 'Comment added',
+      status: 'success',
+      position: 'top-right',
+      duration: 4000,
+      isClosable: true,
+    });
     return;
   };
 

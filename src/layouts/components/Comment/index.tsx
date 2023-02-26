@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Flex, Text, Textarea } from '@chakra-ui/react';
+import { Button, Flex, Text, Textarea, useToast } from '@chakra-ui/react';
 import { CommentContainer } from '../../containers/CommentContainer';
 import { CommentVotes } from '../CommentVotes';
 import { useReplyCommentContext } from '../../../context/ReplyComment';
@@ -37,6 +37,10 @@ export const Comment = ({
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [commentText, setCommentText] = useState<string>(text);
 
+  const toast = useToast();
+
+  const [isRepliesVisible, setIsRepliesVisible] = useState<boolean>(false);
+
   const { setReplyAnswerId, setReplyUser, comments, setComments } =
     useReplyCommentContext();
 
@@ -63,6 +67,13 @@ export const Comment = ({
       );
 
       setComments(newComments);
+      toast({
+        title: 'Comment deleted',
+        status: 'success',
+        position: 'top-right',
+        duration: 4000,
+        isClosable: true,
+      });
       return;
     }
 
@@ -76,6 +87,13 @@ export const Comment = ({
       );
 
       setComments([...comments]);
+      toast({
+        title: 'Comment deleted',
+        status: 'success',
+        position: 'top-right',
+        duration: 4000,
+        isClosable: true,
+      });
       return;
     }
   };
@@ -94,6 +112,13 @@ export const Comment = ({
         currentComment.text = commentText;
         setComments([...comments]);
         setIsEditMode(false);
+        toast({
+          title: 'Comment updated',
+          status: 'info',
+          position: 'top-right',
+          duration: 4000,
+          isClosable: true,
+        });
       }
       return;
     }
@@ -111,6 +136,13 @@ export const Comment = ({
         currentCommentReply.text = commentText;
       }
 
+      toast({
+        title: 'Comment updated',
+        status: 'info',
+        position: 'top-right',
+        duration: 4000,
+        isClosable: true,
+      });
       setComments([...comments]);
       setIsEditMode(false);
     }
@@ -156,7 +188,7 @@ export const Comment = ({
         </CommentContentContainer>
       </CommentContainer>
 
-      {replies?.map(({ id: replyId, ...rest }) => (
+      {replies?.slice(0, 1).map(({ id: replyId, ...rest }) => (
         <Flex key={replyId} width='100%' position='relative'>
           <Flex width='7%' justifyContent='center'>
             <Flex border='0.5px solid #fff' />
@@ -172,6 +204,63 @@ export const Comment = ({
           </Flex>
         </Flex>
       ))}
+
+      {!isRepliesVisible && !originId && replies && replies.length > 1 && (
+        <Flex width='100%' position='relative'>
+          <Flex width='7%' justifyContent='center'>
+            <Flex border='0.5px solid #fff' />
+          </Flex>
+
+          <Flex width='93%'>
+            <Text
+              fontWeight='600'
+              onClick={() => setIsRepliesVisible(true)}
+              sx={{
+                cursor: 'pointer',
+
+                '&:hover': {
+                  textDecoration: 'underline',
+                },
+              }}
+            >{`Show all answers... (${replies?.length})`}</Text>
+          </Flex>
+        </Flex>
+      )}
+
+      {isRepliesVisible &&
+        !originId &&
+        replies?.map(({ id: replyId, ...rest }, index) => (
+          <Flex key={replyId} width='100%' position='relative'>
+            <Flex width='7%' justifyContent='center'>
+              <Flex border='0.5px solid #fff' />
+            </Flex>
+
+            <Flex width='93%' flexDirection='column'>
+              <Comment
+                id={replyId}
+                {...rest}
+                originId={id}
+                scrollToAdd={scrollToAdd}
+              />
+
+              {index === replies.length - 1 && (
+                <Text
+                  fontWeight='600'
+                  onClick={() => setIsRepliesVisible(false)}
+                  sx={{
+                    cursor: 'pointer',
+
+                    '&:hover': {
+                      textDecoration: 'underline',
+                    },
+                  }}
+                >
+                  Show less answers...
+                </Text>
+              )}
+            </Flex>
+          </Flex>
+        ))}
     </>
   );
 };
