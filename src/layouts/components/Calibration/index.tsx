@@ -4,7 +4,7 @@ import { CalibrationPoint } from '../CalibrationPoint';
 import { useWebgazer } from '../../../config/useWebgazer';
 
 export const Calibration = ({ onComplete }: { onComplete: () => void }) => {
-  const [calibrationPoints, setCalibrationPoints] = useState([
+  const [calibrationPoints] = useState([
     { top: '10%', left: '10%' },
     { top: '10%', left: '30%' },
     { top: '10%', left: '50%' },
