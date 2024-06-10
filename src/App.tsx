@@ -3,9 +3,12 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { theme } from './theme';
 import { ReplyCommentProvider } from './context/ReplyComment';
 import { useWebgazer } from './config/useWebgazer';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Calibration } from './layouts/components/Calibration';
 
 function App() {
+  const [calibrated, setCalibrated] = useState(false);
+
   useEffect(() => {
     (async () => {
       const startWebGazer = async () => {
@@ -13,7 +16,7 @@ function App() {
         await webgazer
           .setGazeListener((data: any) => {
             if (!data) return;
-            console.log(data);
+            // console.log(data);
           })
           .begin();
       };
@@ -47,7 +50,13 @@ function App() {
     <ChakraProvider theme={theme}>
       <ReplyCommentProvider>
         {/*<HeatmapComponent>*/}
-        <MainView />
+        {/*<MainView />*/}
+
+        {calibrated ? (
+          <MainView />
+        ) : (
+          <Calibration onComplete={() => setCalibrated(true)} />
+        )}
         {/*</HeatmapComponent>*/}
       </ReplyCommentProvider>
     </ChakraProvider>
